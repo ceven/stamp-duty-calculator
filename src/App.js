@@ -1,91 +1,94 @@
 import React, { Component } from "react";
-import logo from "./stamp_duty.jpg";
 import "./App.css";
+import "./StampDuty";
+import {StampDuty} from "./StampDuty";
+import house from "./pics/house.png"
+import car from "./pics/car.png"
+import stamp from "./pics/stamp.png"
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img src={stamp} className="App-logo" alt="logo" />
           <h1 className="App-title">Stamp Duty Calculator</h1>
         </header>
-        <StampDuty />
+
+        <p className="App App-body">
+          <h2>NSW</h2>
+        <HomeStampDuty />
+        <MotorVehicleStampDuty />
+        </p>
+        <footer>
+            <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+            </div>
+        </footer>
       </div>
     );
   }
 }
 
-class StampDuty extends React.Component {
+class HomeStampDuty extends StampDuty {
+
   constructor(props) {
     super(props);
-    this.state = {
-      value: 0,
-      duty: 0
-    };
-    this.handleChange = this.handleChange.bind(this);
+      this.state ={
+          duty: 0,
+          value:0,
+          dutiable: 'home',
+          url: 'https://www.revenue.nsw.gov.au/info/factsheet/duties/general/rates',
+          image: house
+      };
+      this.calculateDuty = this.calculateDuty.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({
-      value: event.target.value,
-      duty: this.calculateDuty(event.target.value)
-    });
-  }
-
-  wrongValue() {
-    return isNaN(this.state.value) || this.state.value < 0;
-  }
-
-  calculateDuty(v) {
+  calculateDuty(value) {
     if (this.wrongValue()) {
       return 0;
     }
-    if (v <= 14000) {
-      return (v * 1.25) / 100;
+    if (value <= 14000) {
+      return (value * 1.25) / 100;
     }
-    if (v <= 30000) {
-      return 175 + (1.5 * (v - 14000)) / 100;
+    if (value <= 30000) {
+      return 175 + (1.5 * (value - 14000)) / 100;
     }
-    if (v <= 80000) {
-      return 415 + (1.75 * (v - 30000)) / 100;
+    if (value <= 80000) {
+      return 415 + (1.75 * (value - 30000)) / 100;
     }
-    if (v <= 300000) {
-      return 1290 + (3.5 * (v - 80000)) / 100;
+    if (value <= 300000) {
+      return 1290 + (3.5 * (value - 80000)) / 100;
     }
-    if (v <= 1000000) {
-      return 8990 + (4.5 * (v - 300000)) / 100;
+    if (value <= 1000000) {
+      return 8990 + (4.5 * (value - 300000)) / 100;
     }
-    return 40490 + (5.5 * (v - 1000000)) / 100;
+    return 40490 + (5.5 * (value - 1000000)) / 100;
   }
 
-  render() {
-    return (
-      <p>
-        <h3>
-          Enter dutiable value:
-          <input
-            className={this.wrongValue() ? "error" : ""}
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />
-          <br />
-        </h3>
-        <h3>
-          {!this.wrongValue() && <label>Stamp duty is {this.state.duty}</label>}
-          {this.wrongValue() && (
-            <p className="error-msg">Please enter a positive number.</p>
-          )}
-        </h3>
-        <footer>
-          See{" "}
-          <a href="https://www.revenue.nsw.gov.au/info/factsheet/duties/general/rates">
-            NSW Duties Rates
-          </a>
-        </footer>
-      </p>
-    );
-  }
+}
+
+class MotorVehicleStampDuty extends StampDuty {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            duty: 0,
+            value: 0,
+            dutiable: 'vehicle',
+            url: 'https://www.revenue.nsw.gov.au/taxes/vehicle',
+            image: car
+        };
+        this.calculateDuty = this.calculateDuty.bind(this);
+    }
+
+    calculateDuty(value) {
+        if (this.wrongValue()) {
+            return 0;
+        }
+        if (value < 50000) {
+          return 3 * value / 100;
+        }
+        return 1350 + 5 * value / 100;
+    }
 }
 export default App;

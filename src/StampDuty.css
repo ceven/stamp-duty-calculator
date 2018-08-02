@@ -1,0 +1,45 @@
+.StampDuty {
+    margin: 10px auto 10px auto;
+    padding: 10px 10px;
+    border: thick solid dodgerblue;
+    background-color: beige;
+    display: flex;
+    align-items: center;
+    width: 80%;
+    height: auto;
+    min-width: 200px;
+}
+
+.StampDuty_content {
+    float: right;
+    width: auto;
+    height: auto;
+    min-width: 100px;
+}
+
+.StampDuty_img {
+    float: left;
+    display: block;
+    min-width: 40px;
+    width: 40%;
+    height: auto;
+    max-width: 200px;
+    padding: 5px 5px;
+}
+
+.StampDuty_input {
+    width: 30%;
+    font-size: 20px;
+    padding: 5px 10px;
+    margin: 10px 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.StampDuty_input.StampDuty_error {
+    border: 2px solid red;
+}
+
+.StampDuty_error-msg {
+    color: red;
+}
