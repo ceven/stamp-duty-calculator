@@ -1,8 +1,15 @@
 {
-  "main.css": "static/css/main.c221f879.css",
-  "main.css.map": "static/css/main.c221f879.css.map",
-  "main.js": "static/js/main.7979a6a3.js",
-  "main.js.map": "static/js/main.7979a6a3.js.map",
-  "static/media/car.png": "static/media/car.caaf968f.png",
-  "static/media/house.png": "static/media/house.a8d59576.png"
+  "main.css": "/stamp-duty-calculator/static/css/main.c4bb2f1f.chunk.css",
+  "main.js": "/stamp-duty-calculator/static/js/main.31bd9e69.chunk.js",
+  "main.js.map": "/stamp-duty-calculator/static/js/main.31bd9e69.chunk.js.map",
+  "runtime~main.js": "/stamp-duty-calculator/static/js/runtime~main.0224e283.js",
+  "runtime~main.js.map": "/stamp-duty-calculator/static/js/runtime~main.0224e283.js.map",
+  "static/js/2.ec4d8b2b.chunk.js": "/stamp-duty-calculator/static/js/2.ec4d8b2b.chunk.js",
+  "static/js/2.ec4d8b2b.chunk.js.map": "/stamp-duty-calculator/static/js/2.ec4d8b2b.chunk.js.map",
+  "index.html": "/stamp-duty-calculator/index.html",
+  "precache-manifest.6bf6f3514166c8f4ccc67bdd08588702.js": "/stamp-duty-calculator/precache-manifest.6bf6f3514166c8f4ccc67bdd08588702.js",
+  "service-worker.js": "/stamp-duty-calculator/service-worker.js",
+  "static/css/main.c4bb2f1f.chunk.css.map": "/stamp-duty-calculator/static/css/main.c4bb2f1f.chunk.css.map",
+  "static/media/car.png": "/stamp-duty-calculator/static/media/car.caaf968f.png",
+  "static/media/house.png": "/stamp-duty-calculator/static/media/house.a8d59576.png"
 }
