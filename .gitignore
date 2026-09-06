@@ -9,6 +9,15 @@
 # production
 /build
 
+# deployed/CRA build artifacts committed to gh-pages (root of repo)
+/asset-manifest.json
+/index.html
+/manifest.json
+/service-worker.js
+/precache-manifest.*.js
+/static/
+/favicon.ico
+
 # misc
 .DS_Store
 .env.local
