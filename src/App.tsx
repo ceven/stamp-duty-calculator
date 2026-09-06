@@ -71,7 +71,7 @@ class HomeStampDuty extends StampDuty {
     super(props);
     this.state = {
       duty: 0,
-      value: 0,
+      value: "",
       dutiable: "home",
       year: 2026,
       url: "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/transfer-duty/understanding-transfer-duty/calculate-transfer-duty",
@@ -118,7 +118,7 @@ class MotorVehicleStampDuty extends StampDuty {
     super(props);
     this.state = {
       duty: 0,
-      value: 0,
+      value: "",
       dutiable: "vehicle",
       year: 2026,
       url: "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/motor-vehicle-duty",

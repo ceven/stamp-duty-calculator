@@ -2,8 +2,21 @@ import { ChangeEvent, Component } from "react";
 import "./StampDuty.css";
 import { formatDuty } from "./duty";
 
+export function cleanDutyInput(raw: string): string {
+  const stripped = raw.replace(/[$,\s]/g, "");
+  return stripped.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+}
+
+export function formatDutyInput(value: string): string {
+  const dot = value.indexOf(".");
+  const int = dot === -1 ? value : value.slice(0, dot);
+  const dec = dot === -1 ? "" : value.slice(dot);
+  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `$${grouped}${dec}`;
+}
+
 interface StampDutyState {
-  value: number;
+  value: string;
   duty: number;
   dutiable: string;
   year: number;
@@ -27,7 +40,7 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
   constructor(props: Record<string, never>) {
     super(props);
     this.state = {
-      value: 0,
+      value: "",
       duty: 0,
       dutiable: "dutiable",
       year: 2026,
@@ -61,23 +74,27 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
   }
 
   handleChange(event: ChangeEvent<HTMLInputElement>) {
-    const value = Number(event.target.value);
-    this.setState({
-      value,
-      duty: this.calculateDuty(value, this.assistanceEnabled()),
-    });
+    const value = cleanDutyInput(event.target.value);
+    const numeric = value === "" ? 0 : Number(value);
+    const duty = isNaN(numeric)
+      ? 0
+      : this.calculateDuty(numeric, this.assistanceEnabled());
+    this.setState({ value, duty });
   }
 
   handleAssistanceChange(event: ChangeEvent<HTMLInputElement>) {
     const assistance = event.target.checked;
-    this.setState({
-      assistance,
-      duty: this.calculateDuty(this.state.value, assistance),
-    });
+    const numeric = Number(this.state.value);
+    const duty =
+      isNaN(numeric) || this.wrongValue()
+        ? 0
+        : this.calculateDuty(numeric, assistance);
+    this.setState({ assistance, duty });
   }
 
   wrongValue(): boolean {
-    return isNaN(this.state.value) || this.state.value < 0;
+    const numeric = Number(this.state.value);
+    return isNaN(numeric) || numeric < 0;
   }
 
   calculateDuty(_value: number, _assistance: boolean): number {
@@ -103,7 +120,8 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
                   : "StampDuty_input"
               }
               type="text"
-              value={this.state.value}
+              value={formatDutyInput(this.state.value)}
+              placeholder="800,000"
               onChange={this.handleChange}
             />
             {this.hasAssistance() && (
