@@ -73,6 +73,7 @@ class HomeStampDuty extends StampDuty {
       duty: 0,
       value: 0,
       dutiable: "home",
+      year: 2026,
       url: "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/transfer-duty/understanding-transfer-duty/calculate-transfer-duty",
       image: house,
     };
@@ -89,7 +90,7 @@ class HomeStampDuty extends StampDuty {
 
   dutyTable(): DutyTable {
     return {
-      caption: "2026/27 Property Transfer Duty Rates",
+      caption: `${this.state.year} Property Transfer Duty Rates`,
       rows: [
         { range: "$0 – $18,000", duty: "$1.25 per $100 (minimum $20)" },
         { range: "$18,001 – $38,000", duty: "$225 + $1.50 per $100 over $18,000" },
@@ -119,19 +120,16 @@ class MotorVehicleStampDuty extends StampDuty {
       duty: 0,
       value: 0,
       dutiable: "vehicle",
+      year: 2026,
       url: "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/motor-vehicle-duty",
       image: car,
     };
     this.calculateDuty = this.calculateDuty.bind(this);
   }
 
-  cardClassName(): string {
-    return "StampDuty--vehicle";
-  }
-
   dutyTable(): DutyTable {
     return {
-      caption: "Motor Vehicle Duty Rates",
+      caption: `${this.state.year} Motor Vehicle Duty Rates`,
       rows: [
         { range: "$0 – $44,999", duty: "$3.00 per $100" },
         { range: "$45,000 or more", duty: "$1,350 + $5.00 per $100 over $45,000" },

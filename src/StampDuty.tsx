@@ -6,6 +6,7 @@ interface StampDutyState {
   value: number;
   duty: number;
   dutiable: string;
+  year: number;
   url: string;
   image: string;
   assistance?: boolean;
@@ -29,6 +30,7 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
       value: 0,
       duty: 0,
       dutiable: "dutiable",
+      year: 2026,
       url: "",
       image: "",
       assistance: false,
@@ -86,14 +88,10 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
     return null;
   }
 
-  cardClassName(): string {
-    return "";
-  }
-
   render() {
     const table = this.dutyTable();
     return (
-      <div className={`StampDuty ${this.cardClassName()}`}>
+      <div className="StampDuty">
         <img className="StampDuty_img" src={this.state.image} alt="" />
         <div className="StampDuty_content">
           <h3>
@@ -119,7 +117,7 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
               </label>
             )}
           </h3>
-          <h3>
+          <h3 aria-live="polite" aria-atomic="true">
             {!this.wrongValue() && (
               <label className="StampDuty_result">
                 Stamp duty is {formatDuty(this.state.duty)}
@@ -131,28 +129,18 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
               </p>
             )}
           </h3>
-          <div>
-            {this.state.url && (
-              <div>
-                See{" "}
-                <a href={this.state.url}>
-                  NSW {this.state.dutiable.charAt(0).toUpperCase()}
-                  {this.state.dutiable.substring(1)} Duty Rates
-                </a>
-              </div>
-            )}
-          </div>
         </div>
         {table && (
           <table className="StampDuty_table">
             <thead>
               <tr>
-                <th>
+                <th colSpan={2}>
                   <button
                     type="button"
                     className="StampDuty_toggle"
                     onClick={this.handleToggleExpanded}
                     aria-expanded={this.isExpanded()}
+                    aria-controls={`${this.state.dutiable}-duty-table`}
                   >
                     <span>{table.caption}</span>
                     <span
@@ -168,7 +156,7 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
               </tr>
             </thead>
             {this.isExpanded() && (
-              <tbody>
+              <tbody id={`${this.state.dutiable}-duty-table`}>
                 {table.rows.map((row) => (
                   <tr key={row.range}>
                     <td>{row.range}</td>
@@ -178,6 +166,15 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
               </tbody>
             )}
           </table>
+        )}
+        {this.state.url && (
+          <div>
+            See{" "}
+            <a href={this.state.url}>
+              NSW {this.state.dutiable.charAt(0).toUpperCase()}
+              {this.state.dutiable.substring(1)} Duty Rates
+            </a>
+          </div>
         )}
       </div>
     );

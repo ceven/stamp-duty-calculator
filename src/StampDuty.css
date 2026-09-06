@@ -9,9 +9,8 @@
   width: 100%;
   margin: 0 auto;
   padding: 1.75rem;
-  background: var(--color-card);
+  background: var(--color-sand);
   border: 1px solid var(--color-border);
-  border-top: 4px solid var(--color-primary);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   text-align: left;
@@ -20,10 +19,6 @@
 
 .StampDuty:hover {
   box-shadow: var(--shadow-card-hover);
-}
-
-.StampDuty--vehicle {
-  border-top-color: var(--color-vehicle-accent);
 }
 
 .StampDuty_img {
@@ -71,7 +66,7 @@
   outline: none;
   border-color: var(--color-primary);
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15);
 }
 
 .StampDuty_input.StampDuty_error {
@@ -87,11 +82,7 @@
 
 .StampDuty_result {
   font-weight: 700;
-  color: var(--color-primary-dark);
-}
-
-.StampDuty--vehicle .StampDuty_result {
-  color: var(--color-vehicle-accent);
+  color: var(--color-secondary);
 }
 
 .StampDuty_assistance {
@@ -131,23 +122,12 @@
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
 }
 
-.StampDuty_table caption {
-  text-align: left;
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--color-primary-dark);
-  padding: 0.6rem 0.9rem 0.4rem;
-}
-
-.StampDuty--vehicle .StampDuty_table caption {
-  color: var(--color-vehicle-accent);
-}
-
 .StampDuty_table th {
-  background: var(--color-footer);
+  background: var(--color-secondary);
   color: #ffffff;
   text-align: left;
   font-weight: 600;
+  letter-spacing: 0.02em;
   padding: 0;
 }
 
@@ -196,33 +176,21 @@
   transform: rotate(180deg);
 }
 
-.StampDuty_table th {
-  background: var(--color-primary);
-  color: #ffffff;
-  text-align: left;
-  font-weight: 600;
-  padding: 0.5rem 0.9rem;
-}
-
-.StampDuty--vehicle .StampDuty_table th {
-  background: var(--color-vehicle-accent);
-}
-
 .StampDuty_table td {
   padding: 0.5rem 0.9rem;
   border-top: 1px solid var(--color-border);
 }
 
-.StampDuty_table tbody tr:nth-child(odd) td {
-  background: #f8fafc;
+.StampDuty_table tbody td {
+  background: #ffffff;
+}
+
+.StampDuty_table tbody tr:nth-child(even) td {
+  background: var(--color-row-alt);
 }
 
 .StampDuty_table tbody tr:hover td {
-  background: var(--color-primary-soft);
-}
-
-.StampDuty--vehicle .StampDuty_table tbody tr:hover td {
-  background: #ccfbf1;
+  background: #d9e2f1;
 }
 
 @media (max-width: 560px) {

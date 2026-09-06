@@ -248,9 +248,7 @@ Plain CSS files are imported directly in components and bundled by Vite. Design 
 
 - `src/index.css` — global body styles, background gradient, and design tokens (`--color-*`, `--radius-*`, `--shadow-*`).
 - `src/App.css` — header gradient, centered responsive body container, and footer.
-- `src/StampDuty.css` — card grid via named areas (image + content in the first row, rates table spanning the row below), input focus & error states, striped rate table, and responsive stacking below 560px. The two calculators always stack vertically (home above vehicle).
-
-Calculator cards can opt into a lookup modifier via `cardClassName()` (e.g. `"StampDuty--vehicle"`), which swaps the accent color for the card border, result, and table header.
+- `src/StampDuty.css` — card grid via named areas (image + content in the first row, rates table spanning the row below), sand-coloured card background shared by both calculators, input focus & error states, striped rate table, and responsive stacking below 560px. The two calculators always stack vertically (home above vehicle).
 
 ## Assets and Images
 

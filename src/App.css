@@ -9,7 +9,6 @@
   height: 3rem;
   width: auto;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.12);
   padding: 4px;
 }
 
@@ -21,12 +20,14 @@
   background: var(--color-footer);
   padding: 1.25rem 2rem;
   color: white;
-  box-shadow: 0 4px 24px rgba(30, 58, 138, 0.35);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.35);
 }
 
 .App-title {
   font-size: 1.75rem;
   margin: 0;
+  font-weight: 700;
+  line-height: 1.2;
   letter-spacing: 0.02em;
   text-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
 }
@@ -37,23 +38,23 @@
 
 .App.App-body {
   flex: 1;
-  width: 100%;
   max-width: 1024px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 2.5rem;
+  padding: 2rem 1.5rem 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
-  align-items: stretch;
+  gap: 1.5rem;
 }
 
 .App.App-body h2 {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  text-align: center;
+  color: var(--color-text);
 }
 
 .App-footer {
@@ -62,6 +63,7 @@
   padding: 1.5rem 1rem;
   text-align: center;
   font-size: 0.9rem;
+  box-shadow: 0 -4px 24px rgba(15, 23, 42, 0.25);
 }
 
 .footer-text p {
