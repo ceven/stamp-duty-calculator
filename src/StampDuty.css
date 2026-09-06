@@ -198,7 +198,7 @@
   background: #d9e2f1;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 650px) {
   .StampDuty {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -214,7 +214,4 @@
     height: 48px;
   }
 
-  .StampDuty_input {
-    width: 100%;
-  }
 }

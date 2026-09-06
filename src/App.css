@@ -82,21 +82,25 @@
   text-decoration: underline;
 }
 
-@media (max-width: 640px) {
-  .App-header {
-    flex-direction: column;
-    padding: 1rem;
-  }
 
-  .App-logo {
-    height: 2.5rem;
+@media (max-width: 650px) {
+  .App-header {
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+  .App-header .App-logo:last-child {
+    display: none;
   }
 
   .App-title {
-    font-size: 1.4rem;
+    font-size: clamp(1rem, 4.5vw, 1.4rem);
+    white-space: nowrap;
   }
 
   .App.App-body {
-    padding: 1.25rem 0.75rem 1.75rem;
+    padding: 0.5rem 0rem 0.5rem;
+    gap: 0.5rem;
   }
 }
