@@ -203,7 +203,8 @@ Unlike Create React App (which used `public/index.html` as a template), Vite use
 - validates input via `wrongValue()` (`isNaN` or negative),
 - displays the computed duty or an error message,
 - renders a link to the NSW Revenue duty rates page,
-- optionally renders an assistance checkbox when `hasAssistance()` is true, with a label from `assistanceLabel()`.
+- optionally renders an assistance checkbox when `hasAssistance()` is true, with a label from `assistanceLabel()`,
+- renders a rate table beside the input when `dutyTable()` returns rows (a `{ caption, rows }` object; `null` by default).
 
 It exports the base class as default and also as a named export. Subclasses override `calculateDuty(value, assistance): number` and set their own initial state (labels, URLs, images). The `assistance` flag is passed to `calculateDuty` so subclasses can adapt the calculation (e.g. the First Home Buyers Assistance Scheme); `handleAssistanceChange` recomputes duty when the checkbox is toggled and `assistanceEnabled()` reads the current flag.
 
@@ -243,11 +244,13 @@ Extends `StampDuty`. Implements the NSW **motor vehicle** duty:
 
 ## Styling
 
-Plain CSS files are imported directly in components and bundled by Vite:
+Plain CSS files are imported directly in components and bundled by Vite. Design tokens (colors, shadows, radii) are defined as CSS custom properties in `:root` in `src/index.css`.
 
-- `src/index.css` — global body styles
-- `src/App.css` — header, footer, layout
-- `src/StampDuty.css` — calculator card, input, and error styles
+- `src/index.css` — global body styles, background gradient, and design tokens (`--color-*`, `--radius-*`, `--shadow-*`).
+- `src/App.css` — header gradient, centered responsive body container, and footer.
+- `src/StampDuty.css` — card grid via named areas (image + content in the first row, rates table spanning the row below), input focus & error states, striped rate table, and responsive stacking below 560px. The two calculators always stack vertically (home above vehicle).
+
+Calculator cards can opt into a lookup modifier via `cardClassName()` (e.g. `"StampDuty--vehicle"`), which swaps the accent color for the card border, result, and table header.
 
 ## Assets and Images
 

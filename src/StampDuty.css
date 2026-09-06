@@ -1,49 +1,247 @@
 .StampDuty {
-    margin: 10px auto 10px auto;
-    padding: 10px 10px;
-    border: thick solid dodgerblue;
-    background-color: beige;
-    display: flex;
-    align-items: center;
-    width: 80%;
-    height: auto;
-    min-width: 200px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "img content"
+    "table table";
+  gap: 1.25rem 1.5rem;
+  align-items: start;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.75rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-top: 4px solid var(--color-primary);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  text-align: left;
+  transition: box-shadow 0.2s ease;
 }
 
-.StampDuty_content {
-    float: right;
-    width: auto;
-    height: auto;
-    min-width: 100px;
+.StampDuty:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.StampDuty--vehicle {
+  border-top-color: var(--color-vehicle-accent);
 }
 
 .StampDuty_img {
-    float: left;
-    display: block;
-    height: auto;
-    max-width: 80px;
-    padding: 5px 5px;
+  grid-area: img;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  margin-top: 4px;
+}
+
+.StampDuty_content {
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.StampDuty_content h3 {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
 .StampDuty_input {
-    width: 30%;
-    font-size: 20px;
-    padding: 5px 10px;
-    margin: 10px 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
+  width: 220px;
+  max-width: 100%;
+  font-size: 1.125rem;
+  font-family: inherit;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: #f8fafc;
+  color: var(--color-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.StampDuty_input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
 }
 
 .StampDuty_input.StampDuty_error {
-    border: 2px solid red;
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
 }
 
 .StampDuty_error-msg {
-    color: red;
+  color: var(--color-error);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.StampDuty_result {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.StampDuty--vehicle .StampDuty_result {
+  color: var(--color-vehicle-accent);
 }
 
 .StampDuty_assistance {
-    display: block;
-    font-size: 16px;
-    margin: 10px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.StampDuty_assistance span {
+  min-width: 0;
+}
+
+.StampDuty_assistance input {
+  flex-shrink: 0;
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.StampDuty_table {
+  grid-area: table;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 0;
+  font-size: 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-table);
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+}
+
+.StampDuty_table caption {
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-primary-dark);
+  padding: 0.6rem 0.9rem 0.4rem;
+}
+
+.StampDuty--vehicle .StampDuty_table caption {
+  color: var(--color-vehicle-accent);
+}
+
+.StampDuty_table th {
+  background: var(--color-footer);
+  color: #ffffff;
+  text-align: left;
+  font-weight: 600;
+  padding: 0;
+}
+
+.StampDuty_toggle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.9rem;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.StampDuty_toggle:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.StampDuty_toggle:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: -2px;
+}
+
+.StampDuty_toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 0.55rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.StampDuty_toggle-icon--open {
+  transform: rotate(180deg);
+}
+
+.StampDuty_table th {
+  background: var(--color-primary);
+  color: #ffffff;
+  text-align: left;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+}
+
+.StampDuty--vehicle .StampDuty_table th {
+  background: var(--color-vehicle-accent);
+}
+
+.StampDuty_table td {
+  padding: 0.5rem 0.9rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.StampDuty_table tbody tr:nth-child(odd) td {
+  background: #f8fafc;
+}
+
+.StampDuty_table tbody tr:hover td {
+  background: var(--color-primary-soft);
+}
+
+.StampDuty--vehicle .StampDuty_table tbody tr:hover td {
+  background: #ccfbf1;
+}
+
+@media (max-width: 560px) {
+  .StampDuty {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "img"
+      "content"
+      "table";
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .StampDuty_img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .StampDuty_input {
+    width: 100%;
+  }
 }

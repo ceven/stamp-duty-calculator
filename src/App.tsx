@@ -1,6 +1,6 @@
 import { Component } from "react";
 import "./App.css";
-import StampDuty from "./StampDuty";
+import StampDuty, { DutyTable } from "./StampDuty";
 import {
   calculateHomeDuty,
   calculateHomeDutyWithFhbas,
@@ -20,11 +20,11 @@ class App extends Component {
           <img src={stamp} className="App-logo" alt="logo" />
         </header>
 
-        <p className="App App-body">
+        <div className="App App-body">
           <h2>NSW</h2>
           <HomeStampDuty />
           <MotorVehicleStampDuty />
-        </p>
+        </div>
         <footer className="App-footer">
           <div className="footer-text">
             <p>Made by Caroline Even. Check my other websites on</p>
@@ -87,6 +87,21 @@ class HomeStampDuty extends StampDuty {
     return "Apply First Home Buyers Assistance Scheme (FHBAS)";
   }
 
+  dutyTable(): DutyTable {
+    return {
+      caption: "2026/27 Property Transfer Duty Rates",
+      rows: [
+        { range: "$0 – $18,000", duty: "$1.25 per $100 (minimum $20)" },
+        { range: "$18,001 – $38,000", duty: "$225 + $1.50 per $100 over $18,000" },
+        { range: "$38,001 – $103,000", duty: "$525 + $1.75 per $100 over $38,000" },
+        { range: "$103,001 – $387,000", duty: "$1,662 + $3.50 per $100 over $103,000" },
+        { range: "$387,001 – $1,290,000", duty: "$11,602 + $4.50 per $100 over $387,000" },
+        { range: "Over $1,290,000", duty: "$52,237 + $5.50 per $100 over $1,290,000" },
+        { range: "Over $3,870,000", duty: "$194,137 + $7.00 per $100 over $3,870,000" },
+      ],
+    };
+  }
+
   calculateDuty(value: number, assistance: boolean): number {
     if (this.wrongValue()) {
       return 0;
@@ -108,6 +123,20 @@ class MotorVehicleStampDuty extends StampDuty {
       image: car,
     };
     this.calculateDuty = this.calculateDuty.bind(this);
+  }
+
+  cardClassName(): string {
+    return "StampDuty--vehicle";
+  }
+
+  dutyTable(): DutyTable {
+    return {
+      caption: "Motor Vehicle Duty Rates",
+      rows: [
+        { range: "$0 – $44,999", duty: "$3.00 per $100" },
+        { range: "$45,000 or more", duty: "$1,350 + $5.00 per $100 over $45,000" },
+      ],
+    };
   }
 
   calculateDuty(value: number): number {

@@ -9,6 +9,17 @@ interface StampDutyState {
   url: string;
   image: string;
   assistance?: boolean;
+  expanded?: boolean;
+}
+
+export interface DutyTableRow {
+  range: string;
+  duty: string;
+}
+
+export interface DutyTable {
+  caption: string;
+  rows: DutyTableRow[];
 }
 
 class StampDuty extends Component<Record<string, never>, StampDutyState> {
@@ -24,6 +35,7 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleAssistanceChange = this.handleAssistanceChange.bind(this);
+    this.handleToggleExpanded = this.handleToggleExpanded.bind(this);
   }
 
   hasAssistance(): boolean {
@@ -36,6 +48,14 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
 
   assistanceEnabled(): boolean {
     return this.state.assistance ?? false;
+  }
+
+  isExpanded(): boolean {
+    return this.state.expanded ?? false;
+  }
+
+  handleToggleExpanded() {
+    this.setState({ expanded: !this.isExpanded() });
   }
 
   handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -62,11 +82,20 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
     return 0;
   }
 
+  dutyTable(): DutyTable | null {
+    return null;
+  }
+
+  cardClassName(): string {
+    return "";
+  }
+
   render() {
+    const table = this.dutyTable();
     return (
-      <div className="StampDuty">
+      <div className={`StampDuty ${this.cardClassName()}`}>
         <img className="StampDuty_img" src={this.state.image} alt="" />
-        <p className="StampDuty_content">
+        <div className="StampDuty_content">
           <h3>
             Enter {this.state.dutiable} value:
             <input
@@ -79,7 +108,6 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
               value={this.state.value}
               onChange={this.handleChange}
             />
-            <br />
             {this.hasAssistance() && (
               <label className="StampDuty_assistance">
                 <input
@@ -87,13 +115,15 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
                   checked={this.assistanceEnabled()}
                   onChange={this.handleAssistanceChange}
                 />
-                {this.assistanceLabel()}
+                <span>{this.assistanceLabel()}</span>
               </label>
             )}
           </h3>
           <h3>
             {!this.wrongValue() && (
-              <label>Stamp duty is {formatDuty(this.state.duty)}</label>
+              <label className="StampDuty_result">
+                Stamp duty is {formatDuty(this.state.duty)}
+              </label>
             )}
             {this.wrongValue() && (
               <p className="StampDuty_error-msg">
@@ -101,7 +131,7 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
               </p>
             )}
           </h3>
-          <p>
+          <div>
             {this.state.url && (
               <div>
                 See{" "}
@@ -111,8 +141,44 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
                 </a>
               </div>
             )}
-          </p>
-        </p>
+          </div>
+        </div>
+        {table && (
+          <table className="StampDuty_table">
+            <thead>
+              <tr>
+                <th>
+                  <button
+                    type="button"
+                    className="StampDuty_toggle"
+                    onClick={this.handleToggleExpanded}
+                    aria-expanded={this.isExpanded()}
+                  >
+                    <span>{table.caption}</span>
+                    <span
+                      className={`StampDuty_toggle-icon${
+                        this.isExpanded() ? " StampDuty_toggle-icon--open" : ""
+                      }`}
+                      aria-hidden="true"
+                    >
+                      ▼
+                    </span>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            {this.isExpanded() && (
+              <tbody>
+                {table.rows.map((row) => (
+                  <tr key={row.range}>
+                    <td>{row.range}</td>
+                    <td>{row.duty}</td>
+                  </tr>
+                ))}
+              </tbody>
+            )}
+          </table>
+        )}
       </div>
     );
   }
