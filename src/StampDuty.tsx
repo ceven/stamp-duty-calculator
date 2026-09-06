@@ -1,5 +1,6 @@
 import { ChangeEvent, Component } from "react";
 import "./StampDuty.css";
+import { formatDuty } from "./duty";
 
 interface StampDutyState {
   value: number;
@@ -7,6 +8,7 @@ interface StampDutyState {
   dutiable: string;
   url: string;
   image: string;
+  assistance?: boolean;
 }
 
 class StampDuty extends Component<Record<string, never>, StampDutyState> {
@@ -18,15 +20,37 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
       dutiable: "dutiable",
       url: "",
       image: "",
+      assistance: false,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleAssistanceChange = this.handleAssistanceChange.bind(this);
+  }
+
+  hasAssistance(): boolean {
+    return false;
+  }
+
+  assistanceLabel(): string {
+    return "";
+  }
+
+  assistanceEnabled(): boolean {
+    return this.state.assistance ?? false;
   }
 
   handleChange(event: ChangeEvent<HTMLInputElement>) {
     const value = Number(event.target.value);
     this.setState({
       value,
-      duty: this.calculateDuty(value),
+      duty: this.calculateDuty(value, this.assistanceEnabled()),
+    });
+  }
+
+  handleAssistanceChange(event: ChangeEvent<HTMLInputElement>) {
+    const assistance = event.target.checked;
+    this.setState({
+      assistance,
+      duty: this.calculateDuty(this.state.value, assistance),
     });
   }
 
@@ -34,7 +58,7 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
     return isNaN(this.state.value) || this.state.value < 0;
   }
 
-  calculateDuty(_value: number): number {
+  calculateDuty(_value: number, _assistance: boolean): number {
     return 0;
   }
 
@@ -56,9 +80,21 @@ class StampDuty extends Component<Record<string, never>, StampDutyState> {
               onChange={this.handleChange}
             />
             <br />
+            {this.hasAssistance() && (
+              <label className="StampDuty_assistance">
+                <input
+                  type="checkbox"
+                  checked={this.assistanceEnabled()}
+                  onChange={this.handleAssistanceChange}
+                />
+                {this.assistanceLabel()}
+              </label>
+            )}
           </h3>
           <h3>
-            {!this.wrongValue() && <label>Stamp duty is {this.state.duty}</label>}
+            {!this.wrongValue() && (
+              <label>Stamp duty is {formatDuty(this.state.duty)}</label>
+            )}
             {this.wrongValue() && (
               <p className="StampDuty_error-msg">
                 Please enter a positive number.

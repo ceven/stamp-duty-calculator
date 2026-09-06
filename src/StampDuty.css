@@ -41,3 +41,9 @@
 .StampDuty_error-msg {
     color: red;
 }
+
+.StampDuty_assistance {
+    display: block;
+    font-size: 16px;
+    margin: 10px 10px;
+}

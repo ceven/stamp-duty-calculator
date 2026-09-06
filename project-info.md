@@ -25,6 +25,7 @@ Homepage: https://ceven.github.io/stamp-duty-calculator/
   - [StampDuty base class](#stampduty-base-class)
   - [HomeStampDuty](#homestampduty)
   - [MotorVehicleStampDuty](#motorvehicestampduty)
+- [Duty calculation module](#duty-calculation-module)
 - [Styling](#styling)
 - [Assets and Images](#assets-and-images)
 - [Tests](#tests)
@@ -79,6 +80,8 @@ There is no router, state library, or API layer — the app is fully client-side
 │   ├── main.tsx            # Entry point: mounts App into #root
 │   ├── App.tsx             # Root component + subclass calculators
 │   ├── StampDuty.tsx       # Base calculator component
+│   ├── duty.ts             # Pure duty calculation functions
+│   ├── duty.test.ts        # Unit tests for the duty functions
 │   ├── App.css
 │   ├── StampDuty.css
 │   ├── index.css
@@ -195,35 +198,48 @@ Unlike Create React App (which used `public/index.html` as a template), Vite use
 
 `src/StampDuty.tsx` is the shared base component. It:
 
-- holds `value`, `duty`, `dutiable` (the type of dutiable item), `url`, and `image` in state,
+- holds `value`, `duty`, `dutiable` (the type of dutiable item), `url`, `image`, and optional `assistance` in state,
 - renders a number input bound to `handleChange`,
 - validates input via `wrongValue()` (`isNaN` or negative),
 - displays the computed duty or an error message,
-- renders a link to the NSW Revenue duty rates page.
+- renders a link to the NSW Revenue duty rates page,
+- optionally renders an assistance checkbox when `hasAssistance()` is true, with a label from `assistanceLabel()`.
 
-It exports the base class as default and also as a named export. Subclasses override `calculateDuty(value): number` and set their own initial state (labels, URLs, images).
+It exports the base class as default and also as a named export. Subclasses override `calculateDuty(value, assistance): number` and set their own initial state (labels, URLs, images). The `assistance` flag is passed to `calculateDuty` so subclasses can adapt the calculation (e.g. the First Home Buyers Assistance Scheme); `handleAssistanceChange` recomputes duty when the checkbox is toggled and `assistanceEnabled()` reads the current flag.
 
 Note: subclasses bind `this.calculateDuty` in their constructors so it can be called from the shared `handleChange`.
 
 ### HomeStampDuty
 
-Extends `StampDuty`. Implements the NSW **home/transfer** duty tiers:
+Extends `StampDuty`. Implements the NSW **home/transfer** duty tiers using CPI-indexed 2026/27 rates, plus a **residential premium** tier above $3.87m and a **first home buyer** toggle:
 
-| Property value   | Duty                            |
-| ---------------- | ------------------------------- |
-| ≤ $14,000        | 1.25% of value                  |
-| ≤ $30,000        | $175 + 1.5% over $14,000        |
-| ≤ $80,000        | $415 + 1.75% over $30,000       |
-| ≤ $300,000       | $1,290 + 3.5% over $80,000      |
-| ≤ $1,000,000     | $8,990 + 4.5% over $300,000     |
-| > $1,000,000     | $40,490 + 5.5% over $1,000,000  |
+| Property value   | Duty                              |
+| ---------------- | --------------------------------- |
+| ≤ $18,000        | 1.25% of value (minimum $20)      |
+| ≤ $38,000        | $225 + 1.5% over $18,000          |
+| ≤ $103,000       | $525 + 1.75% over $38,000         |
+| ≤ $387,000       | $1,662 + 3.5% over $103,000       |
+| ≤ $1,290,000     | $11,602 + 4.5% over $387,000      |
+| ≤ $3,870,000     | $52,237 + 5.5% over $1,290,000    |
+| > $3,870,000     | $194,137 + 7% over $3,870,000     |
+
+When `assistance` is enabled, the **First Home Buyers Assistance Scheme (FHBAS)** applies: no duty on homes up to $800,000, and a sliding concession between $800,000 and $1,000,000 (full duty minus `dutyAt$800k × (1,000,000 − value) / 200,000`). Duty reverts to the general rate at $1,000,000 and above.
 
 ### MotorVehicleStampDuty
 
 Extends `StampDuty`. Implements the NSW **motor vehicle** duty:
 
-- value < $50,000 → 3% of value
-- value ≥ $50,000 → $1,350 + 5% of value
+- value < $45,000 → 3% of value
+- value ≥ $45,000 → $1,350 + 5% of value over $45,000
+
+### Duty calculation module
+
+`src/duty.ts` contains the pure, exported duty functions used by the calculators:
+
+- `calculateHomeDuty(value)` — general transfer duty (2026/27 rates, including the $20 minimum and the premium tier).
+- `calculateHomeDutyWithFhbas(value)` — transfer duty under the First Home Buyers Assistance Scheme.
+- `calculateMotorVehicleDuty(value)` — motor vehicle duty.
+- `formatDuty(duty)` — formats a number as AUD currency for display.
 
 ## Styling
 
@@ -243,6 +259,7 @@ Plain CSS files are imported directly in components and bundled by Vite:
 Tests use **Vitest** with **React Testing Library** running in a **jsdom** environment.
 
 - `src/App.test.tsx` — smoke test that renders `<App />` and asserts the title is present.
+- `src/duty.test.ts` — unit tests for `calculateHomeDuty`, `calculateHomeDutyWithFhbas`, and `calculateMotorVehicleDuty`, including Revenue NSW's published example figures ($450,000 → $14,437; $1,350,000 → $55,537; $4,000,000 → $203,237).
 - `src/setupTests.ts` — imports `@testing-library/jest-dom/vitest` for DOM matchers like `toBeInTheDocument()`.
 
 Run once with `npm test`, or in watch mode with `npm run test:watch`.
@@ -263,9 +280,10 @@ The `base: "/stamp-duty-calculator/"` setting in `vite.config.ts` ensures asset 
 
 1. Add a subclass of `StampDuty` in `src/App.tsx` (mirroring `HomeStampDuty` / `MotorVehicleStampDuty`).
 2. Set its initial state: `dutiable` label, `url` to the relevant NSW Revenue page, and `image`.
-3. Implement `calculateDuty(value: number): number`.
-4. Render the component inside the `<p className="App App-body">` block in `App`'s render method.
-5. (Optional) Add tests in a new `*.test.tsx` file, or extend `App.test.tsx`.
+3. Implement `calculateDuty(value: number, assistance: boolean): number`; if rates are involved, prefer adding a pure function in `src/duty.ts` and calling it from the component.
+4. To show an assistance checkbox, override `hasAssistance()` to return `true` and `assistanceLabel()` with the checkbox text, then handle the flag inside `calculateDuty`.
+5. Render the component inside the `<p className="App App-body">` block in `App`'s render method.
+6. (Optional) Add tests for new duty formulas in `src/duty.test.ts`, or extend `App.test.tsx`.
 
 ### Running the type checker
 

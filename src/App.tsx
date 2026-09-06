@@ -1,6 +1,11 @@
 import { Component } from "react";
 import "./App.css";
 import StampDuty from "./StampDuty";
+import {
+  calculateHomeDuty,
+  calculateHomeDutyWithFhbas,
+  calculateMotorVehicleDuty,
+} from "./duty";
 import house from "./assets/house.png";
 import car from "./assets/car.png";
 import stamp from "./assets/stamp.png";
@@ -68,32 +73,27 @@ class HomeStampDuty extends StampDuty {
       duty: 0,
       value: 0,
       dutiable: "home",
-      url: "https://www.revenue.nsw.gov.au/info/factsheet/duties/general/rates",
+      url: "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/transfer-duty/understanding-transfer-duty/calculate-transfer-duty",
       image: house,
     };
     this.calculateDuty = this.calculateDuty.bind(this);
   }
 
-  calculateDuty(value: number): number {
+  hasAssistance(): boolean {
+    return true;
+  }
+
+  assistanceLabel(): string {
+    return "Apply First Home Buyers Assistance Scheme (FHBAS)";
+  }
+
+  calculateDuty(value: number, assistance: boolean): number {
     if (this.wrongValue()) {
       return 0;
     }
-    if (value <= 14000) {
-      return (value * 1.25) / 100;
-    }
-    if (value <= 30000) {
-      return 175 + (1.5 * (value - 14000)) / 100;
-    }
-    if (value <= 80000) {
-      return 415 + (1.75 * (value - 30000)) / 100;
-    }
-    if (value <= 300000) {
-      return 1290 + (3.5 * (value - 80000)) / 100;
-    }
-    if (value <= 1000000) {
-      return 8990 + (4.5 * (value - 300000)) / 100;
-    }
-    return 40490 + (5.5 * (value - 1000000)) / 100;
+    return assistance
+      ? calculateHomeDutyWithFhbas(value)
+      : calculateHomeDuty(value);
   }
 }
 
@@ -104,7 +104,7 @@ class MotorVehicleStampDuty extends StampDuty {
       duty: 0,
       value: 0,
       dutiable: "vehicle",
-      url: "https://www.revenue.nsw.gov.au/taxes/vehicle",
+      url: "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/motor-vehicle-duty",
       image: car,
     };
     this.calculateDuty = this.calculateDuty.bind(this);
@@ -114,10 +114,7 @@ class MotorVehicleStampDuty extends StampDuty {
     if (this.wrongValue()) {
       return 0;
     }
-    if (value < 50000) {
-      return (3 * value) / 100;
-    }
-    return 1350 + (5 * value) / 100;
+    return calculateMotorVehicleDuty(value);
   }
 }
 
